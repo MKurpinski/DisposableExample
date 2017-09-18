@@ -6,7 +6,25 @@ namespace DisposableExample
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            using (var peopleRepo = new PeopleRepository(new MyContext()))
+            {
+                var personToAdd = new Person {FirstName = "John", LastName = "Smith"};
+                peopleRepo.Create(personToAdd);
+            }
+
+            var peopleRepository= new PeopleRepository(new MyContext());
+            var person = peopleRepository.Get(1);
+            peopleRepository.Dispose();
+            try
+            {
+                person = peopleRepository.Get(1);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.ReadKey();
         }
     }
 }
