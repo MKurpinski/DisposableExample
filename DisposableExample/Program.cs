@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace DisposableExample
 {
@@ -6,13 +7,13 @@ namespace DisposableExample
     {
         static void Main(string[] args)
         {
-            using (var peopleRepo = new PeopleRepository(new MyContext()))
+            using (var peopleRepo = new PeopleRepository(new MyContext(), new StreamWriter(@"G:\log.txt", true)))
             {
                 var personToAdd = new Person {FirstName = "John", LastName = "Smith"};
                 peopleRepo.Create(personToAdd);
             }
 
-            var peopleRepository= new PeopleRepository(new MyContext());
+            var peopleRepository= new PeopleRepository(new MyContext(), new StreamWriter(@"G:\log2.txt", true));
             var person = peopleRepository.Get(1);
             peopleRepository.Dispose();
             try
